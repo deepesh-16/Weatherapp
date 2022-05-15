@@ -9,31 +9,11 @@ const jwt=require("jsonwebtoken")
 require('dotenv').config()
 const verifyToken=require('./middlewares/verifyToken');
 
-var cloudinary = require("cloudinary").v2;
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const multer = require("multer");
 
-//configure cloudinary
-cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.API_KEY,
-    api_secret:process.env.API_SECRET,
-    secure: true,
-})
 
-//configure cloudinary storage
-const cloudinaryStorage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: async (req, file) => {
-        return {
-            folder: "vnr2022",
-            public_id: file.fieldname + "-" + Date.now(),
-        };
-    },
-});
 
-//configure multer
-var upload = multer({ storage : cloudinaryStorage})
+
+
 
 //to extract body of request object
 userApp.use(exp.json())
@@ -87,13 +67,10 @@ userApp.post('/login',expressAsyncHandler(async(request,response)=>{
 //create a route to 'create-user'
 userApp.post(
     '/create-user',
-    upload.single("photo"),
     expressAsyncHandler(async(request,response)=>{
-    //get link from cloudinary
-    console.log(request.file.path);
     let usercollectionObject=request.app.get("usercollectionObject")
     //get userObj as string and convert it into object
-    let newUserObj=JSON.parse(request.body.userObj);
+    let newUserObj=request.body;
     //search for user by username
     let userOfDB=await usercollectionObject.findOne({username:newUserObj.username})
 
@@ -106,10 +83,6 @@ userApp.post(
         let hashedPassword=await bcryptjs.hash(newUserObj.password,6);
         //replace plane password with hashed password
         newUserObj.password=hashedPassword;
-        //add profile image link to newUserObj
-        newUserObj.profileImg=request.file.path;
-        //rremove photo property
-        delete newUserObj.photo;
         //insert newUser
         await usercollectionObject.insertOne(newUserObj)
         //send response  to user
