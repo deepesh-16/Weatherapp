@@ -1,0 +1,7 @@
+.slick-slide div {
+    outline: none;
+}
+.scroller{
+    height: 30vh;
+    width:10vh
+}

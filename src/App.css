@@ -1,0 +1,18 @@
+.Box
+{
+    display:flex;
+    flex-direction: column;
+    margin : auto;
+    margin-top : 20px;
+    margin-bottom: 30px;
+    align-items: center;
+    box-shadow: 0 3px 6px 0 #555;
+    padding : 20px 10px;
+    border-radius: 4px;
+    width: 380px;
+    background: white;
+}
+
+.Abc{
+    background-color: black;
+}
