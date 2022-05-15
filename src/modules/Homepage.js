@@ -52,7 +52,7 @@ function Homepage() {
   }
 
   return (
-    <div className="block">
+    <div className="Box col-8 col-sm-6 col-md-4 mx-auto block">
       
       <div className="applabel"> React Weather App </div>
       {weather ? (
